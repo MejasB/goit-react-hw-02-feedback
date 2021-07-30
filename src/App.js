@@ -21,8 +21,15 @@ class App extends Component {
   getTotal() {
     return this.state.good + this.state.neutral + this.state.bad;
   }
+  getTotalPercentage() {
+    return this.getTotal() !== 0
+      ? Math.round((this.state.good / this.getTotal()) * 100)
+      : 0;
+  }
 
   render() {
+    const total = this.getTotal();
+    const percentage = this.getTotalPercentage();
     return (
       <>
         <Section title="Please leave feedback">
@@ -32,16 +39,12 @@ class App extends Component {
           />
         </Section>
         <Section title="Statistics">
-          {this.getTotal() ? (
+          {total ? (
             <Statistics
               options={this.options}
               feedback={this.state}
-              total={this.getTotal()}
-              positivePercentage={
-                this.getTotal() !== 0
-                  ? Math.round((this.state.good / this.getTotal()) * 100)
-                  : 0
-              }
+              total={total}
+              positivePercentage={percentage}
             ></Statistics>
           ) : (
             <Notification message="No feedback given"></Notification>
